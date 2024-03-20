@@ -76,15 +76,15 @@ cap2[, cap := as.numeric(cap)] |>
 rm(cap2_raw)
 
 ## CAP 3 ----
-cap3_raw <- readxl::read_xlsx(file.path("input", "comuni_CAP_ich.xlsx")) |>
-  setDT() |>
-  janitor::clean_names() |>
-  setnames(c("cod_istat", "cod_istat_ch"), c("codice_comune_formato_numerico", "codice_comune_formato_alfanumerico"))
+#cap3_raw <- readxl::read_xlsx(file.path("input", "comuni_CAP_ich.xlsx")) |>
+#  setDT() |>
+#  janitor::clean_names() |>
+#  setnames(c("cod_istat", "cod_istat_ch"), c("codice_comune_formato_numerico", "codice_comune_formato_alfanumerico"))
 
-cap3 <- cap3_raw[, .(codice_comune_formato_numerico, codice_comune_formato_alfanumerico, cap)]
-cap3[, cap := as.numeric(cap)]
+#cap3 <- cap3_raw[, .(codice_comune_formato_numerico, codice_comune_formato_alfanumerico, cap)]
+#cap3[, cap := as.numeric(cap)]
 
-rm(cap3_raw)
+#rm(cap3_raw)
 
 ## CAP 4 ----
 cap_generici_raw <- pdftools::pdf_text(pdf = "https://www.sanpaolostore.it/media/faq/elenco-cap.pdf")
@@ -230,7 +230,11 @@ comuni_isolati <- classificazione_periferia[tolower(classe_periferia) %like% "pe
 
 
 ## CAP totali ----
-tot_cap = rbind(cap1[, .(codice_comune_formato_alfanumerico, cap)], cap2[, .(codice_comune_formato_alfanumerico, cap)], cap3[, .(codice_comune_formato_alfanumerico, cap)], cap4[, .(codice_comune_formato_alfanumerico, cap)], cap5[, .(codice_comune_formato_alfanumerico, cap)])
+tot_cap = rbind(cap1[, .(codice_comune_formato_alfanumerico, cap)], 
+                cap2[, .(codice_comune_formato_alfanumerico, cap)], 
+                #cap3[, .(codice_comune_formato_alfanumerico, cap)], 
+                cap4[, .(codice_comune_formato_alfanumerico, cap)],
+                cap5[, .(codice_comune_formato_alfanumerico, cap)])
 tot_cap[, cap_ch := stringr::str_pad(as.character(cap), width = 5, side = "left", pad = "0")]
 tot_cap = tot_cap[!duplicated(tot_cap)]
 
